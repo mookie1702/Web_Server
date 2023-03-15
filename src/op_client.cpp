@@ -6,13 +6,16 @@
 #include <sys/socket.h>
 
 #define BUF_SIZE 1024
+#define RLT_SIZE 4
+#define OPSZ 4
 
 void error_handling(char *message);
 
 int main(int argc, char **argv) {
+  int count, result;
+  char opmsg[BUF_SIZE];
+
   int sock;
-  int str_len, recv_len, recv_cnt;
-  char message[BUF_SIZE];
   struct sockaddr_in serv_addr;
 
   if (3 != argc) {
@@ -37,28 +40,21 @@ int main(int argc, char **argv) {
     puts("Connected........");
   }
 
-  while (1) {
-    fputs("Input message(Q to quit): ", stdout);
-    fgets(message, BUF_SIZE, stdin);
+  fputs("Operand count: ", stdout);
+  scanf("%d", &count);
+  opmsg[0] = (char)count;
 
-    if (!strcmp(message, "q\n") || !strcmp(message, "Q\n")) {
-      break;
-    }
-
-    str_len = write(sock, message, strlen(message));
-
-    recv_len = 0;
-    while (recv_len < str_len) {
-      recv_cnt = read(sock, &message[recv_len], BUF_SIZE - 1);
-      if (-1 == recv_cnt) {
-        error_handling("read() error!");
-      }
-      recv_len += recv_cnt;
-    }
-
-    message[str_len] = 0;
-    printf("Message from server : %s \n", message);
+  for (int i = 0; i < count; i++) {
+    printf("Operand %d: ", i + 1);
+    scanf("%d", (int *)&opmsg[i * OPSZ + 1]);
   }
+  fgetc(stdin);
+  fputs("Operator:", stdout);
+  scanf("%c", &opmsg[count * OPSZ + 1]);
+  write(sock, opmsg, count * OPSZ + 2);
+
+  read(sock, &result, RLT_SIZE);
+  printf("Operation result: %d\n", result);
 
   close(sock);
   return 0;

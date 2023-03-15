@@ -17,3 +17,6 @@ add_executable(json_client src/json_client.cpp)
 
 add_executable(echo_server src/echo_server.cpp)
 add_executable(echo_client src/echo_client.cpp)
+
+add_executable(op_server src/op_server.cpp)
+add_executable(op_client src/op_client.cpp)
