@@ -9,10 +9,11 @@ include_directories(
     ${RapidJSON_INCLUDE_DIRS}
 )
 
-add_executable(server
-    src/server.cpp
-)
+add_executable(basic_server src/basic_server.cpp)
+add_executable(basic_client src/basic_client.cpp)
 
-add_executable(client
-    src/client.cpp
-)
+add_executable(json_server src/json_server.cpp)
+add_executable(json_client src/json_client.cpp)
+
+add_executable(echo_server src/echo_server.cpp)
+add_executable(echo_client src/echo_client.cpp)
