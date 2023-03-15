@@ -20,3 +20,6 @@ add_executable(echo_client src/echo_client.cpp)
 
 add_executable(op_server src/op_server.cpp)
 add_executable(op_client src/op_client.cpp)
+
+add_executable(uecho_server src/uecho_server.cpp)
+add_executable(uecho_client src/uecho_client.cpp)
