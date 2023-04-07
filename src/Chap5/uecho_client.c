@@ -10,22 +10,20 @@
 void error_handling(char *message);
 
 int main(int argc, char **argv) {
-  int str_len;
-  char message[BUF_SIZE];
-
   int sock;
   socklen_t addr_size;
   struct sockaddr_in serv_addr, from_addr;
+
+  int str_len;
+  char message[BUF_SIZE];
 
   if (3 != argc) {
     printf("Usage : %s <IP> <port> \n", argv[0]);
     exit(1);
   }
 
-  if (-1 == (sock = socket(PF_INET, SOCK_DGRAM, 0))) {
-    char error_message[] = "socket() error!";
-    error_handling(error_message);
-  }
+  if (-1 == (sock = socket(PF_INET, SOCK_DGRAM, 0)))
+    error_handling("socket() error!");
 
   memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
@@ -36,9 +34,7 @@ int main(int argc, char **argv) {
     fputs("Input message(Q to quit): ", stdout);
     fgets(message, sizeof(message), stdin);
 
-    if (!strcmp(message, "q\n") || !strcmp(message, "Q\n")) {
-      break;
-    }
+    if (!strcmp(message, "q\n") || !strcmp(message, "Q\n")) break;
 
     sendto(sock, message, strlen(message), 0, (struct sockaddr *)&serv_addr,
            sizeof(serv_addr));

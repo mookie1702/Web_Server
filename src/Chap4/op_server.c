@@ -25,26 +25,20 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  if (-1 == (serv_sock = socket(PF_INET, SOCK_STREAM, 0))) {
+  if (-1 == (serv_sock = socket(PF_INET, SOCK_STREAM, 0)))
     error_handling("socket() error!");
-  }
 
   memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
   serv_addr.sin_port = htons(atoi(argv[1]));
 
-  if (-1 ==
-      (bind(serv_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)))) {
+  if (-1 == (bind(serv_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr))))
     error_handling("bind() error!");
-  }
-
-  if (-1 == listen(serv_sock, 5)) {
-    error_handling("listen() error!");
-  }
+  if (-1 == listen(serv_sock, 5)) error_handling("listen() error!");
 
   clnt_addr_size = sizeof(clnt_addr);
-
+  
   for (int i = 0; i < 5; i++) {
     clnt_sock =
         accept(serv_sock, (struct sockaddr *)&clnt_addr, &clnt_addr_size);

@@ -20,10 +20,8 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  if (-1 == (sock = socket(PF_INET, SOCK_STREAM, 0))) {
-    char error_message[] = "socket() error!";
-    error_handling(error_message);
-  }
+  if (-1 == (sock = socket(PF_INET, SOCK_STREAM, 0)))
+    error_handling("socket() error!");
 
   memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
@@ -31,8 +29,7 @@ int main(int argc, char **argv) {
   serv_addr.sin_port = htons(atoi(argv[2]));
 
   if (-1 == (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)))) {
-    char error_message[] = "connect() error!";
-    error_handling(error_message);
+    error_handling("connect() error!");
   } else {
     puts("Connected........");
   }
@@ -41,25 +38,18 @@ int main(int argc, char **argv) {
     fputs("Input message(Q to quit): ", stdout);
     fgets(message, BUF_SIZE, stdin);
 
-    if (!strcmp(message, "q\n") || !strcmp(message, "Q\n")) {
-      break;
-    }
+    if (!strcmp(message, "q\n") || !strcmp(message, "Q\n")) break;
 
     str_len = write(sock, message, strlen(message));
-
     recv_len = 0;
     while (recv_len < str_len) {
       recv_cnt = read(sock, &message[recv_len], BUF_SIZE - 1);
-      if (-1 == recv_cnt) {
-        error_handling("read() error!");
-      }
+      if (-1 == recv_cnt) error_handling("read() error!");
       recv_len += recv_cnt;
     }
-
     message[str_len] = 0;
     printf("Message from server : %s \n", message);
   }
-
   close(sock);
   return 0;
 }
