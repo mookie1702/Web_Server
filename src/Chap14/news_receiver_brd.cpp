@@ -14,13 +14,12 @@ void error_handling(string message);
 int main(int argc, char** argv) {
   int recv_sock;
   struct sockaddr_in adr;
-  struct ip_mreq join_adr;
 
   int str_len;
   char buf[BUF_SIZE];
 
-  if (3 != argc) {
-    cout << "Usage: " << argv[0] << " <GroupIP> <PORT>" << endl;
+  if (2 != argc) {
+    cout << "Usage: " << argv[0] << " <PORT>" << endl;
     exit(1);
   }
 
@@ -28,16 +27,10 @@ int main(int argc, char** argv) {
   memset(&adr, 0, sizeof(adr));
   adr.sin_family = AF_INET;
   adr.sin_addr.s_addr = htonl(INADDR_ANY);
-  adr.sin_port = htons(atoi(argv[2]));
+  adr.sin_port = htons(atoi(argv[1]));
 
   if (-1 == bind(recv_sock, (struct sockaddr*)&adr, sizeof(adr)))
     error_handling("bind() error!");
-
-  join_adr.imr_multiaddr.s_addr = inet_addr(argv[1]);
-  join_adr.imr_interface.s_addr = htonl(INADDR_ANY);
-
-  setsockopt(recv_sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, (void*)&join_adr,
-             sizeof(join_adr));
 
   while (1) {
     str_len = recvfrom(recv_sock, buf, BUF_SIZE - 1, 0, NULL, 0);

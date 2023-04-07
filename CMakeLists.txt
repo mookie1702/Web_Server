@@ -56,3 +56,9 @@ add_executable(set_buf src/Chap8/set_buf.c)
 
 # add_executable(echo_selectserv src/echo/echo_selectserv.cpp)
 # add_executable(select src/common_function/select.cpp)
+
+# Chapter 14
+add_executable(news_sender src/Chap14/news_sender.cpp)
+add_executable(news_receiver src/Chap14/news_receiver.cpp)
+add_executable(news_sender_brd src/Chap14/news_sender_brd.cpp)
+add_executable(news_receiver_brd src/Chap14/news_receiver_brd.cpp)
